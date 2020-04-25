@@ -10,18 +10,21 @@ iOS sample app for SSL pinning
 //Following are snippets are in Swift 5:
 // Fetch certificate from SecTrust which comes as Authentication Challange. 
 
-    func serverSSLCertificate(_ serverTrust: SecTrust) -> SecCertificate? {
-        var trustEvalError: UnsafeMutablePointer<CFError?>?
-        // It validates a certificate by verifying its signature plus the signatures of the certificates in its certificate chain according to the policy
-        let isTrusted = SecTrustEvaluateWithError(serverTrust, trustEvalError)
-        guard isTrusted else { print(trustEvalError as Any); return .none }
-        // There can be more than one certificate, or less also.
-        guard SecTrustGetCertificateCount(serverTrust) > 0 else { return .none }
+   
 
-    // The first certificate is the primary one which needs to be validated.
-    let certificate: SecCertificate? = SecTrustGetCertificateAtIndex(serverTrust, 0)
-    return certificate
-}
+     func serverSSLCertificate(_ serverTrust: SecTrust) -> SecCertificate? {
+            var trustEvalError: UnsafeMutablePointer<CFError?>?
+            // It validates a certificate by verifying its signature plus the signatures of the certificates in its certificate chain according to the policy
+            let isTrusted = SecTrustEvaluateWithError(serverTrust, trustEvalError)
+            guard isTrusted else { print(trustEvalError as Any); return .none }
+            // There can be more than one certificate, or less also.
+            guard SecTrustGetCertificateCount(serverTrust) > 0 else { return .none }
+    
+        // The first certificate is the primary one which needs to be validated.
+        let certificate: SecCertificate? = SecTrustGetCertificateAtIndex(serverTrust, 0)
+        return certificate
+    }
+
 
 // To fetch public key of SSL certificate:
 
