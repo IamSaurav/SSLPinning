@@ -52,6 +52,7 @@ class ViewController: UIViewController, URLSessionDelegate {
         guard let serverTrustInfo = challenge.protectionSpace.serverTrust,
             let certificate = serverSSLCertificate(serverTrustInfo) else {return}
         
+        // Either of the below methods "Public key pinning" or "Certificate pinning" can be done
 //        guard let publicKeySha256 = sha256(certificate) else {return}
 //        if pinnedPublicKeyHash == sha256(serverSSlPublicKey) {
 //            completionHandler(.useCredential, URLCredential.init(trust: serverTrustInfo))
@@ -76,6 +77,12 @@ class ViewController: UIViewController, URLSessionDelegate {
         let certificate: SecCertificate? = SecTrustGetCertificateAtIndex(serverTrust, 0)
         return certificate
     }
+    func pinnedCertificate() -> SecCertificate? {
+        guard let certPath = Bundle.main.path(forResource: "bitmountn", ofType: "crt") else { return .none }
+        guard let fileData = try? Data(contentsOf: URL(fileURLWithPath: certPath)) else {return .none}
+        let certificate = SecCertificateCreateWithData(.none, fileData as CFData)
+        return certificate
+    }
     func publicKey(_ certificate: SecCertificate) -> String? {
         // Got public key in SecKey format, for equality check we need in Data/String format.
         // Because our pinned public key hash is in String format.
@@ -86,38 +93,36 @@ class ViewController: UIViewController, URLSessionDelegate {
         let serverSSLPublicKeyString = serverSSLPublicKeyData.base64EncodedString()
         return serverSSLPublicKeyString
     }
-    /*
-    func pinnedCertificateSHA256() -> String? {
-        guard let certPath = Bundle.main.path(forResource: "bitmountn", ofType: "crt") else { return .none }
-        guard let fileData = try? Data(contentsOf: URL(fileURLWithPath: certPath)) else {return .none}
-        // Even a SecCertificate can be created from data.
-        // let certificate = SecCertificateCreateWithData(.none, fileData as CFData)
-        let certificateDataStr = fileData.base64EncodedString()
-        return sha256(certificateDataStr)
-    }
- */
-    func pinnedCertificate() -> SecCertificate? {
-        guard let certPath = Bundle.main.path(forResource: "bitmountn", ofType: "crt") else { return .none }
-        guard let fileData = try? Data(contentsOf: URL(fileURLWithPath: certPath)) else {return .none}
-        let certificate = SecCertificateCreateWithData(.none, fileData as CFData)
-        return certificate
-    }
     func sha256(_ certificate: SecCertificate) -> String? {
         let certData = SecCertificateCopyData(certificate) as Data
         let certStr = certData.base64EncodedString()
         return sha256(certStr)
     }
     func sha256(_ data: Data) -> Data? {
-        guard let res = NSMutableData(length: Int(CC_SHA256_DIGEST_LENGTH)) else { return nil }
-        CC_SHA256((data as NSData).bytes, CC_LONG(data.count), res.mutableBytes.assumingMemoryBound(to: UInt8.self))
-        return res as Data
+        guard let dataBuffer = NSMutableData(length: Int(CC_SHA256_DIGEST_LENGTH)) else { return nil }
+        CC_SHA256((data as NSData).bytes, CC_LONG(data.count), dataBuffer.mutableBytes.assumingMemoryBound(to: UInt8.self))
+        return dataBuffer as Data
     }
-
     func sha256(_ str: String) -> String? {
         guard let data = str.data(using: String.Encoding.utf8), let shaData = sha256(data)
             else { return nil }
         return shaData.base64EncodedString()
     }
+    
+    
+    
+    
+    
+    /*
+       func pinnedCertificateSHA256() -> String? {
+           guard let certPath = Bundle.main.path(forResource: "bitmountn", ofType: "crt") else { return .none }
+           guard let fileData = try? Data(contentsOf: URL(fileURLWithPath: certPath)) else {return .none}
+           // Even a SecCertificate can be created from data.
+           // let certificate = SecCertificateCreateWithData(.none, fileData as CFData)
+           let certificateDataStr = fileData.base64EncodedString()
+           return sha256(certificateDataStr)
+       }
+    */
     
 }
 
