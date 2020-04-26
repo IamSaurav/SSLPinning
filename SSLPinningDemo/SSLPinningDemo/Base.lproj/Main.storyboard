@@ -37,7 +37,7 @@
                                     <action selector="onRelaodTap" destination="BYZ-38-t0r" eventType="touchUpInside" id="ixu-h0-Hdt"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Web page will loaded, if pinning works!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gty-ln-tIM">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Web page will be loaded, if pinning works!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gty-ln-tIM">
                                 <rect key="frame" x="20" y="670" width="374" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="NXT-96-3YI"/>
