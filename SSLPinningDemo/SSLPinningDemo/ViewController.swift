@@ -25,7 +25,6 @@ class ViewController: UIViewController, URLSessionDelegate {
         super.viewDidLoad()
         sendRequest()
     }
-    
     func sendRequest() {
         let url = URL(string: "https://www.bitmountn.com/")!
         let session = URLSession( configuration: URLSessionConfiguration.ephemeral, delegate: self, delegateQueue: .none)
