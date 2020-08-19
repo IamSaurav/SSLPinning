@@ -6,6 +6,11 @@
 //  Copyright © 2020 bitMountn. All rights reserved.
 //
 
+
+protocol ABC {
+    static var a: String { get set }
+
+}
 import UIKit
 import Security
 import CommonCrypto
@@ -13,6 +18,7 @@ import CryptoKit
 import WebKit
 
 class ViewController: UIViewController, URLSessionDelegate {
+    var a: String {get{return ""} set{}}
 
     @IBOutlet weak var webView: WKWebView!
     @IBOutlet weak var reloadButton: UIButton!
@@ -20,7 +26,7 @@ class ViewController: UIViewController, URLSessionDelegate {
     
     let pinnedCertificateHash = "sMzPGEYbmnXjU/MKJiBs9JictExakx7d0IW21i48fCc="
     let pinnedPublicKeyHash: String = "6J6VLPaNas3DSWWd2rS0JTUXr31EqD6L/QgWHVYDiTI="
-
+//    lazy var a: String {get{return""}set{}}
     override func viewDidLoad() {
         super.viewDidLoad()
         sendRequest()
